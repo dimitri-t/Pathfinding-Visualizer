@@ -16,3 +16,7 @@
 .node-visited {
   background-color: blue;
 }
+
+.node-shortest {
+  background-color: orange;
+}

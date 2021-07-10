@@ -45,32 +45,60 @@ function PathfindingVisualizer() {
 
   // Handles onClick for Dijkstra's algo
   const handleDijkstraBtn = () => {
-    // call the algorithm
     const visitedNodes = dijkstra(
       grid,
       grid[START_NODE_ROW][START_NODE_COL],
       grid[FINISH_NODE_ROW][FINISH_NODE_COL]
     );
 
-    // get shortest apth
+    // get shortest path to finish node
     const shortestPath = getNodesInShortestPathOrder(
       grid[FINISH_NODE_ROW][FINISH_NODE_COL]
     );
+
     // visualize it
-    visualizeDijkstra(shortestPath);
+    visualizeDijkstra(shortestPath, visitedNodes);
   };
 
   // Creates the visualization for Dijkstra's algorithm
-  const visualizeDijkstra = (shortestPath) => {
-    console.log(shortestPath);
+  // Shows the shortest path in orange, and the other visited nodes in green
+  const visualizeDijkstra = (shortestPath, visitedNodes) => {
+    for (let i = 0; i <= visitedNodes.length; i++) {
+      // 5 milliseconds * counter
+      const timeoutTimer = 5 * i;
+
+      // Visualize the shortest path if we have visited all nodes
+      if (i === visitedNodes.length) {
+        setTimeout(() => {
+          visualizeShortestPath(shortestPath);
+        }, timeoutTimer);
+        return;
+      }
+
+      // Visualize all visited nodes
+      setTimeout(() => {
+        const node = visitedNodes[i];
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node node-visited';
+      }, timeoutTimer);
+    }
+  };
+
+  // Creates the visualization for the shortest path
+  const visualizeShortestPath = (shortestPath) => {
     for (let i = 0; i < shortestPath.length; i++) {
+      const timeoutTimer = 40 * i;
       setTimeout(() => {
         const node = shortestPath[i];
         document.getElementById(`node-${node.row}-${node.col}`).className =
-          'node node-visited';
-      }, 10 * i);
+          'node node-shortest';
+      }, timeoutTimer);
     }
   };
+
+  // const handleOnMouseDown = () => {
+  //   console.log('hi');
+  // };
 
   // Load Grid
   // here we are passing [] as the second
@@ -99,6 +127,7 @@ function PathfindingVisualizer() {
                     isVisited={isVisited}
                     col={col}
                     row={row}
+                    // handleOnMouseDown={handleOnMouseDown}
                   />
                 );
               })}
