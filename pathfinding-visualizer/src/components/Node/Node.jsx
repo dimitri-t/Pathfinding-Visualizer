@@ -1,11 +1,23 @@
 import React from 'react';
 import './Node.css';
 
-function Node({ isStart, isFinish, isVisited, col, row, handleOnMouseDown }) {
+function Node({
+  isStart,
+  isFinish,
+  isVisited,
+  isWall,
+  col,
+  row,
+  handleOnMouseDown,
+  handleOnMouseUp,
+  handleOnMouseEnter,
+}) {
   const className = isStart
     ? 'node-start'
     : isFinish
     ? 'node-finish'
+    : isWall
+    ? 'node-wall'
     : isVisited
     ? 'node-visited'
     : '';
@@ -15,7 +27,9 @@ function Node({ isStart, isFinish, isVisited, col, row, handleOnMouseDown }) {
     <div
       className={`node ${className}`}
       id={`node-${row}-${col}`}
-      onMouseDown={handleOnMouseDown}
+      onMouseDown={() => handleOnMouseDown(row, col)}
+      onMouseUp={() => handleOnMouseUp()}
+      onMouseEnter={() => handleOnMouseEnter(row, col)}
     ></div>
   );
 }
